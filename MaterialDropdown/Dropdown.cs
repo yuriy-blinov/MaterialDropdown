@@ -439,7 +439,8 @@ namespace MaterialDropdown
 
 			set
 			{
-				if(value == null){
+				if (value == null)
+				{
 					value = EmtpyDatasource;
 				}
 
@@ -750,7 +751,7 @@ namespace MaterialDropdown
 
 			if (anchorView != null)
 			{
-				var av = anchorView as UIBarButtonItem;
+				var av = anchorView as UIBarButtonItemAnchorView;
 				if (av != null)
 				{
 					var isRightBarButtonItem = anchorView.PlainView.Frame.GetMinX() > window.Frame.GetMidX();
@@ -764,59 +765,59 @@ namespace MaterialDropdown
 					}
 
 				}
-
-				if (anchorView == null)
-				{
-					layout = ComputeLayoutBottomDisplay(window);
-					Direction = Direction.Any;
-				}
-				else {
-					switch (Direction)
-					{
-						case Direction.Any:
-							layout = ComputeLayoutBottomDisplay(window);
-							Direction = Direction.Bottom;
-
-							if (layout.offscreenHeight > 0)
-							{
-								var topLayout = ComputeLayoutForTopDisplay(window);
-
-								if (topLayout.offscreenHeight < layout.offscreenHeight)
-								{
-									layout = topLayout;
-									Direction = Direction.Top;
-								}
-							}
-							break;
-						case Direction.Bottom:
-							layout = ComputeLayoutBottomDisplay(window);
-							Direction = Direction.Bottom;
-							break;
-						case Direction.Top:
-							layout = ComputeLayoutForTopDisplay(window);
-							Direction = Direction.Top;
-							break;
-					}
-				}
-
-
-				ConstraintWidthToFittingSizeIfNecessary(ref layout);
-				ConstraintWidthToBoundsIfNecessary(ref layout, window);
-
-
-				var visibleHeight = TableHeight - layout.offscreenHeight;
-				var canBeDisplayed = visibleHeight >= minHeight;
-
-				return new LayoutResult(layout.x, layout.y, layout.width, layout.offscreenHeight, visibleHeight, canBeDisplayed, Direction);
 			}
-			return new LayoutResult(0, 0, 0, 0, 0, false, Direction.Any);
+
+			if (anchorView == null)
+			{
+				layout = ComputeLayoutBottomDisplay(window);
+				Direction = Direction.Any;
+			}
+			else {
+				switch (Direction)
+				{
+					case Direction.Any:
+						layout = ComputeLayoutBottomDisplay(window);
+						Direction = Direction.Bottom;
+
+						if (layout.offscreenHeight > 0)
+						{
+							var topLayout = ComputeLayoutForTopDisplay(window);
+
+							if (topLayout.offscreenHeight < layout.offscreenHeight)
+							{
+								layout = topLayout;
+								Direction = Direction.Top;
+							}
+						}
+						break;
+					case Direction.Bottom:
+						layout = ComputeLayoutBottomDisplay(window);
+						Direction = Direction.Bottom;
+						break;
+					case Direction.Top:
+						layout = ComputeLayoutForTopDisplay(window);
+						Direction = Direction.Top;
+						break;
+				}
+			}
+
+
+			ConstraintWidthToFittingSizeIfNecessary(ref layout);
+			ConstraintWidthToBoundsIfNecessary(ref layout, window);
+
+
+			var visibleHeight = TableHeight - layout.offscreenHeight;
+			var canBeDisplayed = visibleHeight >= minHeight;
+
+			return new LayoutResult(layout.x, layout.y, layout.width, layout.offscreenHeight, visibleHeight, canBeDisplayed, Direction);
+
 		}
 
 		private ComputeLayoutTuple ComputeLayoutBottomDisplay(UIWindow window)
 		{
 			nfloat offscreenHeight = 0;
 			var w = width ?? (anchorView?.PlainView.Bounds.Width ?? FittingWidth()) - bottomOffset.X;
-			var anchorViewX = anchorView?.PlainView.WindowFrame()?.GetMinX() ?? window.Frame.GetMidX() - (width / 2);
+			var anchorViewX = anchorView?.PlainView.WindowFrame()?.GetMinX() ?? window.Frame.GetMidX() - (w / 2);
 			var anchorViewY = anchorView?.PlainView.WindowFrame()?.GetMinY() ?? window.Frame.GetMidY() - (TableHeight / 2);
 
 			var x = anchorViewX + bottomOffset.X;
@@ -838,7 +839,7 @@ namespace MaterialDropdown
 				offscreenHeight = new nfloat(Abs(maxY - windowMaxY));
 			}
 
-			return new ComputeLayoutTuple(x.Value, y, w, offscreenHeight);
+			return new ComputeLayoutTuple(x, y, w, offscreenHeight);
 		}
 
 		private ComputeLayoutTuple ComputeLayoutForTopDisplay(UIWindow window)
@@ -974,7 +975,7 @@ namespace MaterialDropdown
 					AnimationEntranceOptions,
 					() => SetShowedState(),
 					null);
-			
+
 			SelectRowAt(SelectedRowIndex);
 
 			return new Tuple<bool, nfloat>(layout.canBeDisplayed, layout.offscreenHeight);
@@ -1203,7 +1204,7 @@ namespace MaterialDropdown
 											  new ItemSelectedEventArgs(
 												  dropdown.SelectedRowIndex.Value,
 												  dropdown.dataSource[dropdown.SelectedRowIndex.Value]));
-				
+
 				var avStrongRef = dropdown.AnchorView as UIBarButtonItem;
 				if (avStrongRef != null)
 				{
