@@ -52,6 +52,7 @@
     <Compile Include="DismissMode.cs" />
     <Compile Include="Direction.cs" />
     <Compile Include="ItemSelectedEventArgs.cs" />
+    <Compile Include="DropdownButton.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="DropdownCell.xib" />
