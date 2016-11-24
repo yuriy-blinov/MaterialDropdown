@@ -12,12 +12,28 @@ namespace MaterialDropdown
 
 		public DropdownButton(IntPtr handle) : base(handle){ }
 
+		public UIView view;
+
+		UIColor borderColor = new UIColor(red: 0.6494f, green: 0.8155f, blue: 1.0f, alpha: 1.0f);
+		public UIColor BorderColor{
+			get{
+				return borderColor;
+			}
+
+			set{
+				borderColor = value;
+				if (view != null) { 
+					view.BackgroundColor = borderColor;
+				}
+			}
+		}
+
 		public override void AwakeFromNib()
 		{
 			base.AwakeFromNib();
 
-			var view = new UIView();
-			view.BackgroundColor = new UIColor(red: 0.6494f, green: 0.8155f, blue: 1.0f, alpha: 1.0f);
+			view = new UIView();
+			view.BackgroundColor = borderColor;
 
 			view.TranslatesAutoresizingMaskIntoConstraints = false;
 			AddSubview(view);

@@ -30,7 +30,7 @@ namespace MaterialDropdown
 		/// <summary>
 		/// Occurs when dropdown item selected by user.
 		/// </summary>
-		public event ItemSelectedEventHandler ItemSelected;
+		public event ItemSelectedEventHandler SelectedItemChanged;
 		public event EventHandler Canceled;
 		public event EventHandler WillBeShown;
 
@@ -821,7 +821,7 @@ namespace MaterialDropdown
 			var anchorViewY = anchorView?.PlainView.WindowFrame()?.GetMinY() ?? window.Frame.GetMidY() - (TableHeight / 2);
 
 			var x = anchorViewX + bottomOffset.X;
-			var y = anchorViewY + bottomOffset.Y;
+			var y = (anchorViewY > 0 ? anchorViewY : 0) + bottomOffset.Y;
 
 			var maxY = y + TableHeight;
 			var windowMaxY = window.Bounds.GetMaxY() - DropdownConstant.UI.HeightPadding;
@@ -956,7 +956,7 @@ namespace MaterialDropdown
 			if (visibleWindow != null)
 			{
 				visibleWindow.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[dropDown]|", 0, "dropDown", this));
-				visibleWindow.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|[dropDown]|", 0, "dropDown", this));
+				visibleWindow.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-20-[dropDown]-|", 0, "dropDown", this));
 			}
 
 			var layout = ComputeLayout();
@@ -1077,13 +1077,20 @@ namespace MaterialDropdown
 		}
 
 		// Returns the selected item.
-		public object selectedItem
+		public object SelectedItem
 		{
 			get
 			{
 				var row = (tableView.IndexPathForSelectedRow).Row;
 
 				return dataSource[row];
+			}
+
+			set{
+				var index = Array.IndexOf(DataSource, value);
+				if(index >= 0){
+					SelectRowAt(index);
+				}
 			}
 		}
 
@@ -1176,6 +1183,7 @@ namespace MaterialDropdown
 
 			internal void ConfigureCellAt(DropdownCell cell, int index)
 			{
+				Console.WriteLine("ConfigureCellAt " + index);
 				if (index >= 0 && index < dropdown.dataSource.Count())
 				{
 					cell.AccessibilityIdentifier = dropdown.dataSource[index].ToString();
@@ -1200,7 +1208,7 @@ namespace MaterialDropdown
 			{
 				dropdown.SelectedRowIndex = (indexPath as NSIndexPath).Row;
 
-				dropdown.ItemSelected?.Invoke(dropdown,
+				dropdown.SelectedItemChanged?.Invoke(dropdown,
 											  new ItemSelectedEventArgs(
 												  dropdown.SelectedRowIndex.Value,
 												  dropdown.dataSource[dropdown.SelectedRowIndex.Value]));

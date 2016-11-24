@@ -68,7 +68,7 @@ namespace MaterialDropdown.Example
 			};
 
 			// Action triggered on selection
-			amountDropdown.ItemSelected += (sender, e) => this.amountButton.SetTitle(e.Item.ToString(), UIControlState.Normal);
+			amountDropdown.SelectedItemChanged += (sender, e) => this.amountButton.SetTitle(e.Item.ToString(), UIControlState.Normal);
 		}
 
 		private void setupAnchorlessDropDown()
