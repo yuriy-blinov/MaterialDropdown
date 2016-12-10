@@ -14,6 +14,8 @@ namespace MaterialDropdown
 	public class Dropdown : UIView
 	{
 		private readonly static object[] EmtpyDatasource = new object[0];
+
+		[DebuggerDisplay("x={x}, y={y}, width={width}, offscreenHeight={offscreenHeight}")]
 		private struct ComputeLayoutTuple
 		{
 			public nfloat x, y, width, offscreenHeight;
@@ -694,6 +696,7 @@ namespace MaterialDropdown
 			tableViewContainer.Layer.ShadowPath = shadowPath.CGPath;
 		}
 
+		[DebuggerDisplay("x={x}, y={y}, width={width}, visibleHeight={visibleHeight}, offscreenHeight={offscreenHeight}")]
 		private struct LayoutResult
 		{
 			public nfloat x;
