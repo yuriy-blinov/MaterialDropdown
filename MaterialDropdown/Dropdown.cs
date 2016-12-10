@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using CoreFoundation;
 using CoreGraphics;
@@ -10,7 +11,6 @@ namespace MaterialDropdown
 {
 	public delegate void CellConfigurationAction(int index, object item, DropdownCell cell);
 
-	// The action to execute when the user cancels/hides the drop down.
 	public class Dropdown : UIView
 	{
 		private readonly static object[] EmtpyDatasource = new object[0];
@@ -70,7 +70,6 @@ namespace MaterialDropdown
 
 		///<summary>
 		///	The possible directions where the drop down will be showed.
-
 		///	See `Direction` enum for more info.
 		///</summary>
 		private Direction direction = Direction.Any;
@@ -89,9 +88,9 @@ namespace MaterialDropdown
 		}
 
 		private CGPoint topOffset;
+
 		///<summary>
 		///	The offset point relative to `anchorView` when the drop down is shown above the anchor view.
-
 		///	By default, the drop down is showed onto the `anchorView` with the top
 		///	left corner for its origin, so an offset equal to (0, 0).
 		///	You can change here the default drop down origin.
@@ -111,9 +110,9 @@ namespace MaterialDropdown
 		}
 
 		private CGPoint bottomOffset;
+
 		///<summary>
 		///	The offset point relative to `anchorView` when the drop down is shown below the anchor view.
-
 		///	By default, the drop down is showed onto the `anchorView` with the top
 		///	left corner for its origin, so an offset equal to (0, 0).
 		///	You can change here the default drop down origin.
@@ -158,7 +157,6 @@ namespace MaterialDropdown
 		private NSLayoutConstraint yConstraint;
 
 		//MARK: Appearance
-
 		private nfloat cellHeight = DropdownConstant.UI.RowHeight;
 		public nfloat CellHeight
 		{
@@ -196,6 +194,7 @@ namespace MaterialDropdown
 			get { return tableViewBackgoundColor; }
 			set { TableViewBackgoundColor = value; }
 		}
+
 		///<summary>
 		///	The background color of the selected cell in the drop down.
 		///	Changing the background color automatically reloads the drop down.
@@ -454,6 +453,7 @@ namespace MaterialDropdown
 		private int? SelectedRowIndex;
 
 		private CellConfigurationAction customCellConfiguration;
+
 		///<summary>
 		/// A advanced formatter for the cells. Allows customization when custom cells are used
 		/// Changing `customCellConfiguration` automatically reloads the drop down.
