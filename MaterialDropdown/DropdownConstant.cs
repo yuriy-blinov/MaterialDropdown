@@ -26,7 +26,6 @@ namespace MaterialDropdown
 			internal static UIColor SeparatorColor = UIColor.Clear;
 			internal static nfloat CornerRadius = 2;
 			internal static nfloat RowHeight = 44;
-			internal static nfloat HeightPadding = 20;
 
 			internal static class Shadow
 			{

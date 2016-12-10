@@ -827,7 +827,7 @@ namespace MaterialDropdown
 			var y = (anchorViewY > 0 ? anchorViewY : 0) + bottomOffset.Y;
 
 			var maxY = y + TableHeight;
-			var windowMaxY = window.Bounds.GetMaxY() - DropdownConstant.UI.HeightPadding;
+			var windowMaxY = window.Bounds.GetMaxY();
 
 			var keyboardListener = KeyboardListener.SharedInstance;
 
@@ -959,7 +959,7 @@ namespace MaterialDropdown
 			if (visibleWindow != null)
 			{
 				visibleWindow.AddConstraints(NSLayoutConstraint.FromVisualFormat("H:|[dropDown]|", 0, "dropDown", this));
-				visibleWindow.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|-20-[dropDown]-|", 0, "dropDown", this));
+				visibleWindow.AddConstraints(NSLayoutConstraint.FromVisualFormat("V:|[dropDown]|", 0, "dropDown", this));
 			}
 
 			var layout = ComputeLayout();
