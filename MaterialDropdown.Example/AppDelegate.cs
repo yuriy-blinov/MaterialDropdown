@@ -20,7 +20,7 @@ namespace MaterialDropdown.Example
 		{
 			// Override point for customization after application launch.
 			// If not required for your application you can safely delete this method
-			Dropdown.StartListeningToKeyboard();
+			KeyboardListener.SharedInstance.StartListeningToKeyboard();
 			return true;
 		}
 

@@ -5,54 +5,72 @@ using UIKit;
 
 namespace MaterialDropdown
 {
-	public class KeyboardListener
-	{
+    public class KeyboardListener
+    {
+        public static KeyboardListener SharedInstance = new KeyboardListener();
 
-		public static KeyboardListener SharedInstance = new KeyboardListener();
+        public bool IsVisible = false;
+        public CGRect KeyboardFrame = CGRect.Empty;
+        private bool isListening = false;
 
-		public bool IsVisible = false;
-		public CGRect KeyboardFrame = CGRect.Empty;
-		private bool isListening = false;
-	
-		~KeyboardListener() {
-			StopListeningToKeyboard();
-		}
+        private NSObject _willShowNotification;
+        private NSObject _willHideNotification;
 
-	public void StartListeningToKeyboard() {
-		if (isListening) {
-				return;
-		}
+        ~KeyboardListener()
+        {
+            StopListeningToKeyboard();
+        }
 
-		isListening = true;
+        public void StartListeningToKeyboard()
+        {
+            if (isListening)
+            {
+                return;
+            }
 
-		NSNotificationCenter.DefaultCenter.AddObserver(
-			UIKeyboard.WillShowNotification,
-			KeyboardWillShow);
-			
-		NSNotificationCenter.DefaultCenter.AddObserver(
-			UIKeyboard.WillHideNotification,
-			KeyboardWillHide);
-	}
+            isListening = true;
 
-	public void StopListeningToKeyboard() {
-			NSNotificationCenter.DefaultCenter.RemoveObserver((NSObject)(this as object));
-	}
+            _willShowNotification = NSNotificationCenter.DefaultCenter.AddObserver(
+                UIKeyboard.WillShowNotification,
+                KeyboardWillShow);
 
-	public void KeyboardWillShow(NSNotification notification) {
-			IsVisible = true;
-			KeyboardFrame = KeyboardFrameFromNotification(notification);
-	}
+            _willHideNotification = NSNotificationCenter.DefaultCenter.AddObserver(
+                UIKeyboard.WillHideNotification,
+                KeyboardWillHide);
+        }
 
-	private void KeyboardWillHide(NSNotification notification) {
-			IsVisible = false;
-			KeyboardFrame = KeyboardFrameFromNotification(notification);
-	}
+        public void StopListeningToKeyboard()
+        {
+            if (_willShowNotification != null)
+            {
+                NSNotificationCenter.DefaultCenter.RemoveObserver(_willShowNotification);
+                _willShowNotification = null;
+            }
 
-	private CGRect KeyboardFrameFromNotification( NSNotification notification )
-	{
-			return ((notification as NSNotification).UserInfo[UIKeyboard.FrameEndUserInfoKey] as NSValue)?.CGRectValue ?? CGRect.Empty;
-	}
+            if (_willHideNotification != null)
+            {
+                NSNotificationCenter.DefaultCenter.RemoveObserver(_willHideNotification);
+                _willHideNotification = null;
+            }
 
-}
+            isListening = false;
+        }
 
+        public void KeyboardWillShow(NSNotification notification)
+        {
+            IsVisible = true;
+            KeyboardFrame = KeyboardFrameFromNotification(notification);
+        }
+
+        private void KeyboardWillHide(NSNotification notification)
+        {
+            IsVisible = false;
+            KeyboardFrame = KeyboardFrameFromNotification(notification);
+        }
+
+        private CGRect KeyboardFrameFromNotification(NSNotification notification)
+        {
+            return ((notification as NSNotification).UserInfo[UIKeyboard.FrameEndUserInfoKey] as NSValue)?.CGRectValue ?? CGRect.Empty;
+        }
+    }
 }
